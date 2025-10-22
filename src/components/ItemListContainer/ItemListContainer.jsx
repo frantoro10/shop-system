@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { updateProductPrice, updateProductCost, deleteProduct as deleteProductService } from '../../services/products';
 import { ProductsContext } from '../../contexts/ProductsContext';
 import Count from '../Count/Count';
@@ -11,6 +11,28 @@ const ItemListContainer = ({ productsData, onProductDeleted, isAuthenticated }) 
   
   // State for each product: count, price editing, cost editing
   const [productState, setProductState] = useState({});
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+  const itemsPerPage = 10; // 10 items per page on mobile
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Reset to page 1 when products change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [productsData]);
 
   // Get state for a specific product with defaults
   const getProductState = (productId) => ({
@@ -92,9 +114,34 @@ const ItemListContainer = ({ productsData, onProductDeleted, isAuthenticated }) 
     }
   };
 
+  // Pagination logic
+  const totalPages = isMobile ? Math.ceil(productsData.length / itemsPerPage) : 1;
+  const startIndex = isMobile ? (currentPage - 1) * itemsPerPage : 0;
+  const endIndex = isMobile ? startIndex + itemsPerPage : productsData.length;
+  const currentProducts = isMobile ? productsData.slice(startIndex, endIndex) : productsData;
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const goToPage = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className={styles['product-container']}>
-      {productsData.map((item) => {
+      {currentProducts.map((item) => {
         const state = getProductState(item.id);
         
         return (
@@ -189,6 +236,39 @@ const ItemListContainer = ({ productsData, onProductDeleted, isAuthenticated }) 
           </div>
         );
       })}
+      
+      {/* Pagination Controls - Only on Mobile */}
+      {isMobile && totalPages > 1 && (
+        <div className={styles['pagination-container']}>
+          <button 
+            onClick={goToPreviousPage} 
+            disabled={currentPage === 1}
+            className={styles['pagination-button']}
+          >
+            ← Anterior
+          </button>
+          
+          <div className={styles['pagination-info']}>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+              <button
+                key={pageNum}
+                onClick={() => goToPage(pageNum)}
+                className={`${styles['page-number']} ${currentPage === pageNum ? styles['active'] : ''}`}
+              >
+                {pageNum}
+              </button>
+            ))}
+          </div>
+          
+          <button 
+            onClick={goToNextPage} 
+            disabled={currentPage === totalPages}
+            className={styles['pagination-button']}
+          >
+            Siguiente →
+          </button>
+        </div>
+      )}
     </div>
   );
 };
