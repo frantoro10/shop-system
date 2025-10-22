@@ -15,7 +15,6 @@ const ItemListContainer = ({ productsData, onProductDeleted, isAuthenticated }) 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
-  const itemsPerPage = 10; // 10 items per page on mobile
 
   // Detect mobile screen size
   useEffect(() => {
@@ -33,6 +32,9 @@ const ItemListContainer = ({ productsData, onProductDeleted, isAuthenticated }) 
   useEffect(() => {
     setCurrentPage(1);
   }, [productsData]);
+
+  // Dynamic items per page based on screen size
+  const itemsPerPage = isMobile ? 10 : 30; // 10 for mobile, 30 for tablet/desktop
 
   // Get state for a specific product with defaults
   const getProductState = (productId) => ({
@@ -114,11 +116,11 @@ const ItemListContainer = ({ productsData, onProductDeleted, isAuthenticated }) 
     }
   };
 
-  // Pagination logic
-  const totalPages = isMobile ? Math.ceil(productsData.length / itemsPerPage) : 1;
-  const startIndex = isMobile ? (currentPage - 1) * itemsPerPage : 0;
-  const endIndex = isMobile ? startIndex + itemsPerPage : productsData.length;
-  const currentProducts = isMobile ? productsData.slice(startIndex, endIndex) : productsData;
+  // Pagination logic - applies to all screen sizes
+  const totalPages = Math.ceil(productsData.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProducts = productsData.slice(startIndex, endIndex);
 
   const goToNextPage = () => {
     if (currentPage < totalPages) {
@@ -237,8 +239,8 @@ const ItemListContainer = ({ productsData, onProductDeleted, isAuthenticated }) 
         );
       })}
       
-      {/* Pagination Controls - Only on Mobile */}
-      {isMobile && totalPages > 1 && (
+      {/* Pagination Controls - All screen sizes */}
+      {totalPages > 1 && (
         <div className={styles['pagination-container']}>
           <button 
             onClick={goToPreviousPage} 
