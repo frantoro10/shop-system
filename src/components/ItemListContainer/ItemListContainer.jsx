@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { getFirestore, doc, updateDoc } from 'firebase/firestore';
+import { useState, useContext } from 'react';
+import { updateProductPrice, updateProductCost } from '../../services/products';
 import { ProductsContext } from '../../contexts/ProductsContext';
 import Count from '../Count/Count';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
@@ -14,8 +14,9 @@ const ItemListContainer = ({ productsData }) => {
   const [showCostPrices, setShowCostPrices] = useState({});
   const [productCounts, setProductCounts] = useState({});
 
+  // Add products to the cart
   const handleAddProducts = (product) => {
-    const existingProductIndex = cartProducts.findIndex((item) => item.id == product.id);
+    const existingProductIndex = cartProducts.findIndex((item) => item.id === product.id);
     const updatedCartProducts = [...cartProducts];
     const selectedCount = productCounts[product.id] || 1;
 
@@ -23,12 +24,17 @@ const ItemListContainer = ({ productsData }) => {
       updatedCartProducts[existingProductIndex].price += product.price * selectedCount;
       updatedCartProducts[existingProductIndex].quantity += selectedCount;
     } else {
-      updatedCartProducts.push({ ...product, quantity: selectedCount, price: product.price * selectedCount, unitPrice: product.price });
+      updatedCartProducts.push({
+        ...product,
+        quantity: selectedCount,
+        price: product.price * selectedCount,
+        unitPrice: product.price,
+      });
     }
     setCartProducts(updatedCartProducts);
-    console.log(cartProducts);
   };
 
+  // Update product count
   const handleChangeCount = (productId, newCount) => {
     setProductCounts({
       ...productCounts,
@@ -36,6 +42,7 @@ const ItemListContainer = ({ productsData }) => {
     });
   };
 
+  // Update product price
   const handleChangePrice = (productId, newPrice) => {
     setNewPrices({
       ...newPrices,
@@ -43,6 +50,7 @@ const ItemListContainer = ({ productsData }) => {
     });
   };
 
+  // Toggle price change input visibility
   const toggleChangePrice = (productId) => {
     setShowChangePrice({
       ...showChangePrice,
@@ -50,20 +58,17 @@ const ItemListContainer = ({ productsData }) => {
     });
   };
 
+  // Update product price in Firebase
   const changePrice = async (productId) => {
-    const db = getFirestore();
-    const productRef = doc(db, 'fake-database', productId);
     try {
-      await updateDoc(productRef, {
-        price: parseFloat(newPrices[productId]),
-      });
-      alert('Precio final actualizado exitosamente! Presiona F5 para guardar los cambios.');
+      await updateProductPrice(productId, parseFloat(newPrices[productId]));
       toggleChangePrice(productId);
     } catch (error) {
-      alert('Error actualizando el precio', error);
+      alert('Error updating price.');
     }
   };
 
+  // Update product cost
   const handleChangeCostPrice = (productId, newPrice) => {
     setNewCostPrices({
       ...newCostPrices,
@@ -71,6 +76,7 @@ const ItemListContainer = ({ productsData }) => {
     });
   };
 
+  // Toggle cost change input visibility
   const toggleChangeCostPrice = (productId) => {
     setShowCostPrices({
       ...showCostPrices,
@@ -78,89 +84,81 @@ const ItemListContainer = ({ productsData }) => {
     });
   };
 
+  // Update product cost in Firebase
   const changeCostPrice = async (productId) => {
-    const db = getFirestore();
-    const productRef = doc(db, 'fake-database', productId);
     try {
-      await updateDoc(productRef, {
-        cost: parseFloat(newCostPrices[productId]),
-      });
-      alert('Precio de costo actualizado exitosamente! Presiona F5 para guardar los cambios.');
-      toggleChangePrice(productId);
+      await updateProductCost(productId, parseFloat(newCostPrices[productId]));
+      toggleChangeCostPrice(productId);
     } catch (error) {
-      alert('Error actualizando el precio de costo', error);
+      alert('Error updating cost price.');
     }
   };
 
   return (
-    <div className={`${styles["product-container"]}`}>
-      {productsData &&
-        productsData.map((item) => (
-          <div className={`${styles['card-container']} `} key={item.id}>
-            <div className={`${styles['card-img']}`}>
-              <img src={item.img} alt="" /> 
-            </div>
-            <div className={`${styles['card-info']} d-flex flex-column`}>
-              <span className={`${styles['card-name']}`}>{item.name}</span>
-              <div className={`${styles['price-container']} d-flex`}>
-                <div className={`${styles['price-box']} me-2`}>
-                  <span>${item.price}</span>
-                </div>
-                <div className="" style={{ cursor: 'pointer' }}>
-                  <FontAwesomeIcon icon={faPenToSquare} onClick={() => toggleChangePrice(item.id)} size="xl" />
-                </div>
-              </div>
-
-              <div className={`d-flex justify-content-center mt-1 ${styles['cost-container']}`}>
-                <span className="me-2">C: ${item.cost} </span>
-                <div className="d-flex justify-content-center align-items-center" style={{ cursor: 'pointer' }}>
-                  <FontAwesomeIcon icon={faPenToSquare} onClick={() => toggleChangeCostPrice(item.id)} size="lg" />
-                </div>
-              </div>
-              
-              <div>
-                <Count
-                  count={productCounts[item.id] || 1}
-                  onChangeCount={(newCount) => handleChangeCount(item.id, newCount)}
-                />
-              </div>
-              <button onClick={() => handleAddProducts(item)} className={`${styles["add-button"]}`}>Agregar</button>
-
-               {showCostPrices[item.id] && (
-                <>
-                  <input
-                    type="number"
-                    value={newCostPrices[item.id] || ''}
-                    onChange={(e) => handleChangeCostPrice(item.id, e.target.value)}
-                    placeholder="Escribi el nuevo precio de costo"
-                    className="mb-1"
-                  />
-                  <span onClick={() => changeCostPrice(item.id)} className={`${styles['changep-button']}`}>
-                    Modificar COSTO
-                  </span>
-                </>
-              )}
-
-              {showChangePrice[item.id] && (
-                <>
-                  <div className="d-flex flex-column mt-2">
-                    <input
-                      type="number"
-                      value={newPrices[item.id] || ''}
-                      onChange={(e) => handleChangePrice(item.id, e.target.value)}
-                      placeholder="Precio"
-                      className="mb-1"
-                    />
-                    <span onClick={() => changePrice(item.id)} className={`${styles['changep-button']}`}>
-                      Cambiar Precio
-                    </span>
-                  </div>
-                </>
-              )} 
-
-            </div>
+    <div className={styles['product-container']}>
+      {productsData.map((item) => (
+        <div className={styles['card-container']} key={item.id}>
+          <div className={styles['card-img']}>
+            <img src={item.img} alt={item.name} />
           </div>
-        ))}
+          <div className={`${styles['card-info']} d-flex flex-column`}>
+            <span className={styles['card-name']}>{item.name}</span>
+            <div className={`${styles['price-container']} d-flex`}>
+              <div className={styles['price-box']}>
+                <span>${item.price}</span>
+              </div>
+              <FontAwesomeIcon
+                icon={faPenToSquare}
+                onClick={() => toggleChangePrice(item.id)}
+                size="xl"
+                style={{ cursor: 'pointer' }}
+              />
+            </div>
+
+            <div className={`${styles['cost-container']} d-flex justify-content-center`}>
+              <span>C: ${item.cost}</span>
+              <FontAwesomeIcon
+                icon={faPenToSquare}
+                onClick={() => toggleChangeCostPrice(item.id)}
+                size="lg"
+                style={{ cursor: 'pointer' }}
+              />
+            </div>
+
+            <Count
+              count={productCounts[item.id] || 1}
+              onChangeCount={(newCount) => handleChangeCount(item.id, newCount)}
+            />
+            <button onClick={() => handleAddProducts(item)} className={styles['add-button']}>
+              Add to Cart
+            </button>
+
+            {showCostPrices[item.id] && (
+              <div>
+                <input
+                  type="number"
+                  value={newCostPrices[item.id] || ''}
+                  onChange={(e) => handleChangeCostPrice(item.id, e.target.value)}
+                  placeholder="Enter new cost price"
+                />
+                <button onClick={() => changeCostPrice(item.id)}>Update Cost</button>
+              </div>
+            )}
+
+            {showChangePrice[item.id] && (
+              <div>
+                <input
+                  type="number"
+                  value={newPrices[item.id] || ''}
+                  onChange={(e) => handleChangePrice(item.id, e.target.value)}
+                  placeholder="Enter new price"
+                />
+                <button onClick={() => changePrice(item.id)}>Update Price</button>
+              </div>
+            )}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

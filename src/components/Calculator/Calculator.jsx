@@ -1,4 +1,3 @@
-import React from 'react'
 import Modal from 'react-modal';
 import { useState, useEffect, useContext } from 'react';
 import { ProductsContext } from '../../contexts/ProductsContext';
@@ -26,9 +25,6 @@ const Calculator = () => {
     })
     return (allPrices)
   }
-
-
-
 
 
   return (
@@ -65,9 +61,6 @@ const Calculator = () => {
             )
           })
         }
-
-
-
       </Modal>
 
     </div>

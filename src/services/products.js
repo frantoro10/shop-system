@@ -8,4 +8,16 @@ export async function fetchProducts() {
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 }
 
-// Aquí puedes agregar más funciones: createProduct, updateProduct, deleteProduct, etc.
+export async function updateProductPrice(productId, newPrice) {
+  const db = getFirestore(app);
+  const productRef = doc(db, 'kioscoProducts', productId);
+  await updateDoc(productRef, { price: newPrice });
+}
+
+export async function updateProductCost(productId, newCost) {
+  const db = getFirestore(app);
+  const productRef = doc(db, 'kioscoProducts', productId);
+  await updateDoc(productRef, { cost: newCost });
+}
+
+// Puedes agregar más funciones CRUD aquí (createProduct, deleteProduct, updateProductCost, etc.)
