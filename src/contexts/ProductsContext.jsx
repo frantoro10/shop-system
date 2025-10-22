@@ -23,7 +23,7 @@ export const ProductsProvider = ({ children }) => {
   // Get base de datos - firebase
   useEffect(() => {
    const db = getFirestore();
-   const productsCollection = collection(db, "fake-database") 
+   const productsCollection = collection(db, "kioscoProducts") 
     getDocs(productsCollection).then((snapshot) => {
       const productsData = snapshot.docs.map((doc) => ({id: doc.id, ...doc.data() }));
       setProducts(productsData);
