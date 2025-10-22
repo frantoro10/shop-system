@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 // firebase para importar array de objetos - collection
-import {getFirestore, collection, getDocs} from 'firebase/firestore';
+import { fetchProducts } from '../services/products';
 
 export const ProductsContext = createContext();
 
@@ -22,13 +22,9 @@ export const ProductsProvider = ({ children }) => {
 
   // Get base de datos - firebase
   useEffect(() => {
-   const db = getFirestore();
-   const productsCollection = collection(db, "kioscoProducts") 
-    getDocs(productsCollection).then((snapshot) => {
-      const productsData = snapshot.docs.map((doc) => ({id: doc.id, ...doc.data() }));
-      setProducts(productsData);
-    }).catch((error) => console.log(error)); 
-
+    fetchProducts()
+      .then(setProducts)
+      .catch((error) => console.log(error));
   }, []);
 
   // Filtros
