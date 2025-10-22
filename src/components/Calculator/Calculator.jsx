@@ -29,9 +29,12 @@ const Calculator = () => {
 
   return (
     <div>
-      <div>
-        <FontAwesomeIcon icon={faCalculator} size="2xl" className={` ${styles["calculator-icon"]}`} onClick={handleShow} />
-      </div>
+      {/* Only show calculator icon when modal is closed */}
+      {!openModal && (
+        <div>
+          <FontAwesomeIcon icon={faCalculator} size="xl" className={` ${styles["calculator-icon"]}`} onClick={handleShow} />
+        </div>
+      )}
 
       <Modal isOpen={openModal} className={`${styles["modal"]}`}>
 

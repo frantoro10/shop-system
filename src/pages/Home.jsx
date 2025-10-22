@@ -51,13 +51,6 @@ const Home = () => {
         </div>
       </div>
       
-      {/* Only show calculator if authenticated */}
-      {isAuthenticated && (
-        <div className={`${styles["calculator-container"]}`}>
-          <Calculator/>
-        </div>
-      )}
-
       {/* Only show create product button if authenticated */}
       {isAuthenticated && (
         <div className='text-center my-3'>
@@ -73,8 +66,12 @@ const Home = () => {
       {/* Product Creation Form - only if authenticated */}
       {isAuthenticated && showProductForm && <ProductForm onProductCreated={handleProductChange} />}
 
-      <div className='my-3'>
+      <div className='my-3 position-relative'>
         <SearchBar />
+        {/* Calculator - Always visible, positioned next to search bar */}
+        <div className={`${styles["calculator-container"]}`}>
+          <Calculator/>
+        </div>
       </div>
 
       <div className='container-fluid border '>
