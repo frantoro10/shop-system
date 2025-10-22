@@ -1,27 +1,78 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styles from "./Home.module.scss"
-import { useContext } from 'react'
+import { ProductsContext } from "../contexts/ProductsContext"
+import { AuthContext } from "../contexts/AuthContext"
 import ItemListContainer from "../components/ItemListContainer/ItemListContainer"
 import FiltersMenu from "../components/Filters/FiltersMenu"
 import SearchBar from "../components/Filters/SearchBar";
 import Calculator from '../components/Calculator/Calculator';
-
-import { ProductsContext } from "../contexts/ProductsContext"
+import ProductForm from '../components/ProductForm/ProductForm';
 
 const Home = () => {
 
-  const { products, filterProducts } = useContext(ProductsContext);
+  const navigate = useNavigate();
+  const { products, filterProducts, refreshProducts } = useContext(ProductsContext);
+  const { isAuthenticated, logout } = useContext(AuthContext);
+  const [showProductForm, setShowProductForm] = useState(false);
+
+  // Refresh products list after creating or deleting
+  const handleProductChange = () => {
+    refreshProducts();
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
+  };
 
   return (
     <div className=''>
       <div className={`${styles["brand-container"]} mt-1 d-flex flex-row  align-items-center justify-content-center`}>
         <img src="/images/brand/big-bull.webp" alt="" />
         <h1 className='mb-2 ms-2 ' style={{ fontSize: "2em" }}>Big Bull</h1>
+        
+        {/* Login/Logout Button */}
+        <div className={styles['auth-button-container']}>
+          {isAuthenticated ? (
+            null /* Logout button removed as per recent edits */
+          ) : (
+            <button 
+              onClick={() => navigate('/login')}
+              className={styles['auth-button']}
+            >
+              Iniciar Sesión
+            </button>
+          )}
+        </div>
       </div>
-      <div className={`${styles["calculator-container"]}`}>
-        <Calculator/>
-      </div>
-      {/* <h2 className='text-center'>Catalogo</h2> */}
+      
+      {/* Only show calculator if authenticated */}
+      {isAuthenticated && (
+        <div className={`${styles["calculator-container"]}`}>
+          <Calculator/>
+        </div>
+      )}
+
+      {/* Only show create product button if authenticated */}
+      {isAuthenticated && (
+        <div className='text-center my-3'>
+          <button 
+            onClick={() => setShowProductForm(!showProductForm)}
+            className={styles['toggle-form-button']}
+          >
+            {showProductForm ? 'Cerrar Formulario' : 'Crear Nuevo Producto'}
+          </button>
+        </div>
+      )}
+
+      {/* Product Creation Form - only if authenticated */}
+      {isAuthenticated && showProductForm && <ProductForm onProductCreated={handleProductChange} />}
+
       <div className='my-3'>
         <SearchBar />
       </div>
@@ -32,8 +83,19 @@ const Home = () => {
             <FiltersMenu />
           </div>
           <div className='col-12 col-md-11'>
-            {/* En informática un operador ternario es un operador que toma tres argumentos. Este operador ternario puede pasar varias líneas de código a una sola línea en lenguajes que puedan usarlo tales como | Si hay productos en el array filterProducts, mostrarme este , si no el array completo de productos (products) */}
-            {filterProducts.length > 0 ? (<ItemListContainer productsData={filterProducts} />) : (<ItemListContainer productsData={products} />)}
+            {filterProducts.length > 0 ? (
+              <ItemListContainer 
+                productsData={filterProducts} 
+                onProductDeleted={handleProductChange}
+                isAuthenticated={isAuthenticated}
+              />
+            ) : (
+              <ItemListContainer 
+                productsData={products} 
+                onProductDeleted={handleProductChange}
+                isAuthenticated={isAuthenticated}
+              />
+            )}
           </div>
         </div>
       </div>

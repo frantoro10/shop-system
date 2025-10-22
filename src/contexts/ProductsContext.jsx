@@ -20,11 +20,16 @@ export const ProductsProvider = ({ children }) => {
     setCartProducts(cartProducts.filter(product => product.id !== productId))
   }
 
-  // Get base de datos - firebase
-  useEffect(() => {
+  // Fetch products from Firebase
+  const loadProducts = () => {
     fetchProducts()
       .then(setProducts)
       .catch((error) => console.log(error));
+  };
+
+  // Get base de datos - firebase
+  useEffect(() => {
+    loadProducts();
   }, []);
 
   // Filtros
@@ -71,7 +76,20 @@ export const ProductsProvider = ({ children }) => {
 
   return (
     
-    <ProductsContext.Provider value={{ products, setProducts, filters, setFilters, filterProducts,setFilterProducts, cartProducts, setCartProducts, selectedCount,setSelectedCount, removeProductCart }}> 
+    <ProductsContext.Provider value={{ 
+      products, 
+      setProducts, 
+      filters, 
+      setFilters, 
+      filterProducts,
+      setFilterProducts, 
+      cartProducts, 
+      setCartProducts, 
+      selectedCount,
+      setSelectedCount, 
+      removeProductCart,
+      refreshProducts: loadProducts
+    }}> 
       {children}
     </ProductsContext.Provider>
   );

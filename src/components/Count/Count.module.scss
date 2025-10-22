@@ -1,0 +1,52 @@
+.count-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+}
+
+.count-button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    @media (max-width: 768px) {
+        width: 32px;
+        height: 32px;
+        font-size: 1.1rem;
+    }
+}
+
+.count-display {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    min-width: 30px;
+    text-align: center;
+
+    @media (max-width: 768px) {
+        font-size: 1.1rem;
+        min-width: 25px;
+    }
+}

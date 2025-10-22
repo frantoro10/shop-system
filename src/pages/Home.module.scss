@@ -1,43 +1,131 @@
 
 
 .brand-container {
-    background-color: black;
-    color: rgb(77, 172, 255);
-    font-size: 2rem ;
+    background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+    color: #4db8ff;
+    padding: 1.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: relative;
+    
+    h1 {
+        font-size: 2.5rem;
+        margin: 0;
+        font-weight: 700;
+    }
+
     img {
-        width: 8%;
+        width: 80px;
+        height: auto;
+    }
+
+    @media (max-width: 768px) {
+        padding: 1rem 0.5rem;
+        
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        img {
+            width: 60px;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        h1 {
+            font-size: 2rem;
+        }
+
+        img {
+            width: 70px;
+        }
+    }
+}
+
+.auth-button-container {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+
+    @media (max-width: 768px) {
+        position: static;
+        transform: none;
+        margin-left: auto;
+    }
+}
+
+.auth-button {
+    padding: 0.65rem 1.5rem;
+    background: linear-gradient(135deg, #4db8ff 0%, #357abd 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(77, 184, 255, 0.3);
+    white-space: nowrap;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(77, 184, 255, 0.4);
+        background: linear-gradient(135deg, #5fc3ff 0%, #4a90e2 100%);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
     }
 }
 
 .calculator-container {
     cursor: pointer;
-    width: 5%;
-    position: absolute;
-    right: 2em;
-}
+    width: 60px;
+    position: fixed;
+    right: 2rem;
+    top: 1.5rem;
+    z-index: 999;
+    transition: transform 0.3s;
 
-// .filter-container {
-//    border-left: 2px solid red !important;
-// }
+    &:hover {
+        transform: scale(1.1);
+    }
 
-// Responsive
-
-// Phone
-
-@media (max-width: 720px) {
-    .brand-container {
-        font-size: 1.4rem;
-        img {
-            width: 25%;
-        }
+    @media (max-width: 768px) {
+        width: 50px;
+        right: 1rem;
+        top: 1rem;
     }
 }
 
-@media (min-width: 720px) and (max-width: 1800px) {
-    .brand-container {
-        font-size: 1.4rem;
-        img {
-            width: 10%;
-        }
+.toggle-form-button {
+    padding: 0.85rem 1.75rem;
+    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(74, 144, 226, 0.3);
+    }
+
+    @media (max-width: 768px) {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
     }
 }

@@ -34,32 +34,67 @@ const FiltersMenu = () => {
         });
 
         setFilterProducts(filteredProducts);
-        console.log(filteredProducts)
+        
     }, [selectedCheckboxes, setFilterProducts, products]);
 
 
     return (
-        <div>
-            <div className={` d-flex flex-md-column flex-sm-row ${styles['filter-menu']}`}>
-                <label>
-                    <input className='ms-2' type="checkbox" name="category" value="kiosco" onChange={filterCategory} checked={selectedCheckboxes['kiosco'] || false} />
-                    <span>Kiosco</span>
+        <div className={styles['filter-wrapper']}>
+            <div className={styles['filter-menu']}>
+                <label className={styles['checkbox-label']}>
+                    <input 
+                        className={styles['checkbox-input']} 
+                        type="checkbox" 
+                        name="category" 
+                        value="kiosco" 
+                        onChange={filterCategory} 
+                        checked={selectedCheckboxes['kiosco'] || false} 
+                    />
+                    <span className={styles['checkbox-text']}>Kiosco</span>
                 </label>
-                <label>
-                    <input className='ms-2' type="checkbox" name="category" value="almacen" onChange={filterCategory} checked={selectedCheckboxes['almacen'] || false} />
-                    <span>Almacen</span>
+                <label className={styles['checkbox-label']}>
+                    <input 
+                        className={styles['checkbox-input']} 
+                        type="checkbox" 
+                        name="category" 
+                        value="almacen" 
+                        onChange={filterCategory} 
+                        checked={selectedCheckboxes['almacen'] || false} 
+                    />
+                    <span className={styles['checkbox-text']}>Almacen</span>
                 </label>
-                <label>
-                    <input className='ms-2' type="checkbox" name="category" value="bebidas" onChange={filterCategory} checked={selectedCheckboxes['bebidas'] || false} />
-                    <span>Bebidas</span>
+                <label className={styles['checkbox-label']}>
+                    <input 
+                        className={styles['checkbox-input']} 
+                        type="checkbox" 
+                        name="category" 
+                        value="bebidas" 
+                        onChange={filterCategory} 
+                        checked={selectedCheckboxes['bebidas'] || false} 
+                    />
+                    <span className={styles['checkbox-text']}>Bebidas</span>
                 </label>
-                <label>
-                    <input className='ms-2' type="checkbox" name="category" value="lacteos" onChange={filterCategory} checked={selectedCheckboxes['lacteos'] || false} />
-                    <span>Lacteos</span>
+                <label className={styles['checkbox-label']}>
+                    <input 
+                        className={styles['checkbox-input']} 
+                        type="checkbox" 
+                        name="category" 
+                        value="lacteos" 
+                        onChange={filterCategory} 
+                        checked={selectedCheckboxes['lacteos'] || false} 
+                    />
+                    <span className={styles['checkbox-text']}>Lacteos</span>
                 </label>
-                <label>
-                    <input className='ms-2' type="checkbox" name="category" value="farmacia" onChange={filterCategory} checked={selectedCheckboxes['farmacia'] || false} />
-                    <span>Farmacia</span>
+                <label className={styles['checkbox-label']}>
+                    <input 
+                        className={styles['checkbox-input']} 
+                        type="checkbox" 
+                        name="category" 
+                        value="farmacia" 
+                        onChange={filterCategory} 
+                        checked={selectedCheckboxes['farmacia'] || false} 
+                    />
+                    <span className={styles['checkbox-text']}>Farmacia</span>
                 </label>
             </div>
         </div>

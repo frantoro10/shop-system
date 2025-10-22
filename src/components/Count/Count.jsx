@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styles from './Count.module.scss';
 
 const Count = ({ count, onChangeCount }) => {
     const [selectedCount, setSelectedCount] = useState(count);
@@ -22,10 +23,10 @@ const Count = ({ count, onChangeCount }) => {
     };
 
     return (
-        <div className='mt-2'>
-            <button onClick={lessCount} className='me-2 mb-2'>-</button>
-            {selectedCount}
-            <button onClick={addCount} className="ms-2 mb-2">+</button>
+        <div className={styles['count-container']}>
+            <button onClick={lessCount} className={styles['count-button']}>-</button>
+            <span className={styles['count-display']}>{selectedCount}</span>
+            <button onClick={addCount} className={styles['count-button']}>+</button>
         </div>
     );
 };
