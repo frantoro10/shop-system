@@ -2,51 +2,69 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    margin: 0.75rem 0;
+    gap: var(--space-3);
+    margin: var(--space-3) 0;
+    padding: var(--space-2);
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
 }
 
+// Counter buttons - professional slate gray styling
 .count-button {
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-    color: white;
-    font-size: 1.25rem;
-    font-weight: 700;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border: 2px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
     cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
     display: flex;
     align-items: center;
     justify-content: center;
 
     &:hover {
         transform: scale(1.1);
-        box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        box-shadow: var(--shadow-md);
+        background: var(--primary-50);
+        border-color: var(--secondary-400);
+        color: var(--secondary-700);
     }
 
     &:active {
         transform: scale(0.95);
+        box-shadow: var(--shadow-xs);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
     }
 
     @media (max-width: 768px) {
-        width: 32px;
-        height: 32px;
-        font-size: 1.1rem;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        font-size: var(--text-xl);
     }
 }
 
 .count-display {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #333;
-    min-width: 30px;
+    font-size: var(--text-2xl);
+    font-weight: var(--font-bold);
+    color: var(--text-primary);
+    min-width: 40px;
     text-align: center;
+    letter-spacing: -0.02em;
 
     @media (max-width: 768px) {
-        font-size: 1.1rem;
-        min-width: 25px;
+        font-size: var(--text-xl);
+        min-width: 35px;
     }
 }

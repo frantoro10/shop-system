@@ -31,20 +31,39 @@ const Calculator = () => {
     <div>
       {/* Only show calculator icon when modal is closed */}
       {!openModal && (
-        <div>
+        <div className={styles["calculator-icon-wrapper"]}>
           <FontAwesomeIcon icon={faCalculator} size="xl" className={` ${styles["calculator-icon"]}`} onClick={handleShow} />
+          {cartProducts.length > 0 && (
+            <span className={styles["cart-badge"]}>{cartProducts.length}</span>
+          )}
         </div>
       )}
 
-      <Modal isOpen={openModal} className={`${styles["modal"]}`}>
+      {/* Modal with proper overlay styling */}
+      <Modal 
+        isOpen={openModal} 
+        className={`${styles["modal"]}`}
+        overlayClassName={styles["modal-overlay"]}
+      >
+        <button 
+          onClick={handleClose}
+          className={styles["close-button"]}
+          aria-label="Cerrar carrito"
+        >
+          <FontAwesomeIcon icon={faX} />
+        </button>
 
-        <div>
-          <FontAwesomeIcon icon={faX} onClick={handleClose} size="2xl" style={{marginLeft: "1rem", marginTop: "1rem"}}/>
-        </div>
         <div className={`${styles["total-price"]}`}>
           <p>Total: <span>${totalPrice()}</span> </p>
         </div>
-        {
+        
+        {cartProducts.length === 0 ? (
+          <div className={styles["empty-cart"]}>
+            <p>🛒</p>
+            <h3>Tu carrito está vacío</h3>
+            <p>Agrega productos para comenzar tu compra</p>
+          </div>
+        ) : (
           cartProducts.map((product) => {
             return (
                      
@@ -63,7 +82,7 @@ const Calculator = () => {
               
             )
           })
-        }
+        )}
       </Modal>
 
     </div>

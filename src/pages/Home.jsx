@@ -31,15 +31,21 @@ const Home = () => {
   };
 
   return (
-    <div className=''>
-      <div className={`${styles["brand-container"]} mt-1 d-flex flex-row  align-items-center justify-content-center`}>
+    <div className={styles["page-container"]}>
+      <div className={`${styles["brand-container"]} d-flex flex-row align-items-center justify-content-center`}>
         <img src="/images/brand/big-bull.webp" alt="" />
         <h1 className='mb-2 ms-2 ' style={{ fontSize: "2em" }}>Big Bull</h1>
         
         {/* Login/Logout Button */}
         <div className={styles['auth-button-container']}>
           {isAuthenticated ? (
-            null /* Logout button removed as per recent edits */
+            <button 
+              onClick={handleLogout}
+              className={styles['auth-button']}
+              data-action="logout"
+            >
+              Cerrar Sesión
+            </button>
           ) : (
             <button 
               onClick={() => navigate('/login')}
@@ -74,12 +80,12 @@ const Home = () => {
         </div>
       </div>
 
-      <div className='container-fluid border '>
+      <div className='container-fluid'>
         <div className='row flex-row'>
-          <div className={` ${styles["filter-container"]} col-12 col-md-1  d-flex justify-content-center `}>
+          <div className={` ${styles["filter-container"]} col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3 col-xxl-2 d-flex justify-content-center `}>
             <FiltersMenu />
           </div>
-          <div className='col-12 col-md-11'>
+          <div className='col-12 col-sm-8 col-md-8 col-lg-9 col-xl-9 col-xxl-10'>
             {filterProducts.length > 0 ? (
               <ItemListContainer 
                 productsData={filterProducts} 

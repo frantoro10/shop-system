@@ -1,53 +1,89 @@
-
-
 .brand-container {
-    background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-    color: #4db8ff;
-    padding: 1.5rem 1rem;
+    background: linear-gradient(135deg, var(--primary-800) 0%, var(--primary-900) 100%);
+    color: var(--text-inverse);
+    padding: var(--space-6) var(--space-4);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    gap: var(--space-4);
+    box-shadow: var(--shadow-lg);
     position: relative;
+    border-bottom: 3px solid var(--primary-500);
+    overflow: hidden;
+
+    /* Animated background effect */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+        0% {
+            left: -100%;
+        }
+        100% {
+            left: 100%;
+        }
+    }
     
     h1 {
-        font-size: 2.5rem;
+        font-size: var(--text-4xl);
         margin: 0;
-        font-weight: 700;
+        font-weight: var(--font-bold);
+        letter-spacing: -0.02em;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 1;
     }
 
     img {
-        width: 80px;
+        width: 90px;
         height: auto;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        transition: transform var(--transition-base);
+        position: relative;
+        z-index: 1;
+
+        &:hover {
+            transform: scale(1.08) rotate(5deg);
+        }
     }
 
     @media (max-width: 768px) {
-        padding: 1rem 0.5rem;
+        padding: var(--space-4) var(--space-2);
+        gap: var(--space-2);
         
         h1 {
-            font-size: 1.5rem;
+            font-size: var(--text-xl);
         }
 
         img {
-            width: 60px;
+            width: 65px;
         }
     }
 
     @media (min-width: 769px) and (max-width: 1024px) {
+        padding: var(--space-5) var(--space-3);
+        
         h1 {
-            font-size: 2rem;
+            font-size: var(--text-3xl);
         }
 
         img {
-            width: 70px;
+            width: 75px;
         }
     }
 }
 
 .auth-button-container {
     position: absolute;
-    right: 1.5rem;
+    right: var(--space-6);
     top: 50%;
     transform: translateY(-50%);
 
@@ -59,78 +95,146 @@
 }
 
 .auth-button {
-    padding: 0.65rem 1.5rem;
-    background: linear-gradient(135deg, #4db8ff 0%, #357abd 100%);
-    color: white;
+    padding: var(--space-3) var(--space-6);
+    background: linear-gradient(135deg, var(--secondary-400) 0%, var(--secondary-600) 100%);
+    color: var(--text-inverse);
     border: none;
-    border-radius: 25px;
-    font-size: 0.95rem;
-    font-weight: 600;
+    border-radius: var(--radius-full);
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
     cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 4px 12px rgba(77, 184, 255, 0.3);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
     white-space: nowrap;
+    letter-spacing: -0.01em;
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(77, 184, 255, 0.4);
-        background: linear-gradient(135deg, #5fc3ff 0%, #4a90e2 100%);
+        box-shadow: var(--shadow-lg);
+        background: linear-gradient(135deg, var(--secondary-500) 0%, var(--secondary-700) 100%);
     }
 
     &:active {
         transform: translateY(0);
+        box-shadow: var(--shadow-sm);
+    }
+
+    /* Special styling when it's logout button */
+    &[data-action="logout"] {
+        background: linear-gradient(135deg, var(--error) 0%, var(--error-dark) 100%);
+
+        &:hover {
+            background: linear-gradient(135deg, #ef5350 0%, #c62828 100%);
+        }
     }
 
     @media (max-width: 768px) {
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
+        padding: var(--space-2) var(--space-4);
+        font-size: var(--text-sm);
     }
 }
 
+// Calculator button styling and positioning - professional theme
 .calculator-container {
     cursor: pointer;
-    width: 48px;
+    width: 56px;
     position: absolute;
-    right: 1rem;
+    right: var(--space-4);
     top: 50%;
     transform: translateY(-50%);
-    z-index: 10;
-    transition: transform 0.3s;
+    z-index: var(--z-dropdown);
+    transition: all var(--transition-base);
+    padding: var(--space-3);
+    background: var(--secondary-600);
+    border-radius: var(--radius-xl);
+    border: 2px solid var(--secondary-700);
+    box-shadow: var(--shadow-md);
 
     &:hover {
-        transform: translateY(-50%) scale(1.1);
+        transform: translateY(-50%) scale(1.12);
+        background: var(--secondary-700);
+        border-color: var(--secondary-800);
+        box-shadow: var(--shadow-lg);
     }
 
+    &:active {
+        transform: translateY(-50%) scale(1.05);
+    }
+
+    // On mobile, position calculator button below search bar
     @media (max-width: 768px) {
-        width: 42px;
-        right: 0.5rem;
+        width: 48px;
+        position: fixed;
+        right: var(--space-4);
+        top: auto;
+        bottom: var(--space-6);
+        transform: none;
+        padding: var(--space-3);
+        
+        &:hover {
+            transform: scale(1.12);
+        }
+
+        &:active {
+            transform: scale(1.05);
+        }
     }
 
     @media (min-width: 769px) and (max-width: 1024px) {
-        width: 45px;
-        right: 0.75rem;
+        width: 52px;
+        right: var(--space-3);
     }
 }
 
+// Toggle form button - consistent styling
 .toggle-form-button {
-    padding: 0.85rem 1.75rem;
-    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-    color: white;
+    padding: var(--space-4) var(--space-8);
+    background: linear-gradient(135deg, var(--secondary-600) 0%, var(--secondary-700) 100%);
+    color: var(--text-inverse);
     border: none;
-    border-radius: 8px;
-    font-size: 1.05rem;
-    font-weight: 600;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-lg);
+    font-weight: var(--font-semibold);
     cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
+    letter-spacing: -0.01em;
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(74, 144, 226, 0.3);
+        box-shadow: var(--shadow-md);
+        background: linear-gradient(135deg, var(--secondary-700) 0%, var(--secondary-800) 100%);
+    }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: var(--shadow-xs);
     }
 
     @media (max-width: 768px) {
-        padding: 0.75rem 1.25rem;
-        font-size: 0.95rem;
+        padding: var(--space-3) var(--space-5);
+        font-size: var(--text-base);
+    }
+}
+
+// Additional container improvements
+.page-container {
+    animation: fadeIn var(--transition-slow);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.filter-container {
+    padding: var(--space-4) var(--space-2);
+    
+    @media (max-width: 768px) {
+        padding: var(--space-3) 0;
     }
 }

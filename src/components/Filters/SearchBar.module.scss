@@ -1,14 +1,107 @@
-.search-container{
-    
-    width: 70%;
-    
+.search-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: var(--space-4) var(--space-3);
+}
+
+.search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-form {
+    flex: 1;
+    margin: 0;
+}
+
+.search-icon {
+    position: absolute;
+    left: var(--space-5);
+    color: var(--text-tertiary);
+    font-size: var(--text-lg);
+    pointer-events: none;
+    z-index: 2;
+    transition: color var(--transition-base);
+
+    @media (max-width: 768px) {
+        left: var(--space-4);
+        font-size: var(--text-base);
+    }
 }
 
 .search-input {
-    margin: 0 auto;
-    width: 60%;
-    height: 5vh;
-    font-size: 1.6em;
-    font-weight: 500;
-    border: 2px solid black;
+    width: 100%;
+    padding: var(--space-4) var(--space-12);
+    padding-left: var(--space-12);
+    font-size: var(--text-lg);
+    font-weight: var(--font-medium);
+    border: 2px solid var(--border-medium);
+    border-radius: var(--radius-xl);
+    background-color: var(--bg-elevated);
+    color: var(--text-primary);
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
+    font-family: var(--font-sans);
+    
+    &::placeholder {
+        color: var(--text-tertiary);
+        font-weight: var(--font-normal);
+    }
+
+    &:hover {
+        border-color: var(--border-dark);
+        box-shadow: var(--shadow-md);
+    }
+
+    &:focus {
+        outline: none;
+        border-color: var(--primary-500);
+        box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1), var(--shadow-md);
+        background-color: var(--bg-primary);
+        
+        ~ .search-icon {
+            color: var(--primary-500);
+        }
+    }
+
+    @media (max-width: 768px) {
+        padding: var(--space-3) var(--space-10);
+        padding-left: var(--space-10);
+        font-size: var(--text-base);
+    }
+}
+
+.clear-button {
+    position: absolute;
+    right: var(--space-4);
+    background: var(--gray-200);
+    border: none;
+    border-radius: var(--radius-full);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast);
+    z-index: 2;
+
+    &:hover {
+        background: var(--error);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    @media (max-width: 768px) {
+        width: 24px;
+        height: 24px;
+        right: var(--space-3);
+    }
 }

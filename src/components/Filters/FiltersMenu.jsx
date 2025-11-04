@@ -2,6 +2,9 @@ import React from 'react'
 import styles from './FiltersMenu.module.scss'
 import { ProductsContext } from '../../contexts/ProductsContext'
 import { useState, useContext, useEffect } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// Category icons for filter menu
+import { faCandyCane, faShoppingBasket, faBottleWater, faCheese, faPrescriptionBottle } from '@fortawesome/free-solid-svg-icons'
 
 
 const FiltersMenu = () => {
@@ -50,7 +53,10 @@ const FiltersMenu = () => {
                         onChange={filterCategory} 
                         checked={selectedCheckboxes['kiosco'] || false} 
                     />
-                    <span className={styles['checkbox-text']}>Kiosco</span>
+                    <span className={styles['checkbox-text']}>
+                        <FontAwesomeIcon icon={faCandyCane} className={styles['category-icon']} />
+                        Kiosco
+                    </span>
                 </label>
                 <label className={styles['checkbox-label']}>
                     <input 
@@ -61,7 +67,10 @@ const FiltersMenu = () => {
                         onChange={filterCategory} 
                         checked={selectedCheckboxes['almacen'] || false} 
                     />
-                    <span className={styles['checkbox-text']}>Almacen</span>
+                    <span className={styles['checkbox-text']}>
+                        <FontAwesomeIcon icon={faShoppingBasket} className={styles['category-icon']} />
+                        Almacen
+                    </span>
                 </label>
                 <label className={styles['checkbox-label']}>
                     <input 
@@ -72,7 +81,10 @@ const FiltersMenu = () => {
                         onChange={filterCategory} 
                         checked={selectedCheckboxes['bebidas'] || false} 
                     />
-                    <span className={styles['checkbox-text']}>Bebidas</span>
+                    <span className={styles['checkbox-text']}>
+                        <FontAwesomeIcon icon={faBottleWater} className={styles['category-icon']} />
+                        Bebidas
+                    </span>
                 </label>
                 <label className={styles['checkbox-label']}>
                     <input 
@@ -83,7 +95,10 @@ const FiltersMenu = () => {
                         onChange={filterCategory} 
                         checked={selectedCheckboxes['lacteos'] || false} 
                     />
-                    <span className={styles['checkbox-text']}>Lacteos</span>
+                    <span className={styles['checkbox-text']}>
+                        <FontAwesomeIcon icon={faCheese} className={styles['category-icon']} />
+                        Lacteos
+                    </span>
                 </label>
                 <label className={styles['checkbox-label']}>
                     <input 
@@ -94,7 +109,10 @@ const FiltersMenu = () => {
                         onChange={filterCategory} 
                         checked={selectedCheckboxes['farmacia'] || false} 
                     />
-                    <span className={styles['checkbox-text']}>Farmacia</span>
+                    <span className={styles['checkbox-text']}>
+                        <FontAwesomeIcon icon={faPrescriptionBottle} className={styles['category-icon']} />
+                        Farmacia
+                    </span>
                 </label>
             </div>
         </div>

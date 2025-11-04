@@ -148,6 +148,11 @@ const ItemListContainer = ({ productsData, onProductDeleted, isAuthenticated }) 
         
         return (
           <div className={styles['card-container']} key={item.id}>
+            {/* Category Badge */}
+            <span className={`${styles['category-badge']} ${styles[`badge-${item.category.toLowerCase()}`]}`}>
+              {item.category}
+            </span>
+            
             <div className={styles['card-img']}>
               <img src={item.img} alt={item.name} />
             </div>
@@ -158,7 +163,8 @@ const ItemListContainer = ({ productsData, onProductDeleted, isAuthenticated }) 
               {/* Price Display and Edit */}
               <div className={`${styles['price-container']} d-flex`}>
                 <div className={styles['price-box']}>
-                  <span>${item.price}</span>
+                  <span className={styles['price-currency']}>$</span>
+                  <span className={styles['price-amount']}>{item.price}</span>
                 </div>
                 {isAuthenticated && (
                   <FontAwesomeIcon
