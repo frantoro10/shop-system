@@ -34,7 +34,7 @@ const ItemListContainer = ({ productsData, onProductDeleted, isAuthenticated }) 
   }, [productsData]);
 
   // Dynamic items per page based on screen size
-  const itemsPerPage = isMobile ? 10 : 30; // 10 for mobile, 30 for tablet/desktop
+  const itemsPerPage = isMobile ? 10 : 24; // 10 for mobile, 30 for tablet/desktop
 
   // Get state for a specific product with defaults
   const getProductState = (productId) => ({
