@@ -1,6 +1,173 @@
 .mainDiv {
     background-color: var(--bg-secondary);
-    position: relative;
     min-height: 100vh;
-    padding-bottom: var(--space-8);
+}
+
+/* Sticky Header */
+.header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    background: linear-gradient(135deg, var(--primary-800) 0%, var(--primary-900) 100%);
+    box-shadow: var(--shadow-lg);
+    border-bottom: 3px solid var(--primary-500);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.headerContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5) var(--space-6);
+    max-width: var(--container-2xl);
+    margin: 0 auto;
+    position: relative;
+
+    @media (max-width: 768px) {
+        padding: var(--space-4) var(--space-3);
+        gap: var(--space-3);
+    }
+}
+
+/* Brand Section */
+.brandSection {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-shrink: 0;
+
+    img {
+        width: 150px;
+        height: auto;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        @media (max-width: 768px) {
+            width: 100px;
+        }
+    }
+
+    h1 {
+        font-size: var(--text-3xl);
+        color: var(--text-inverse);
+        margin: 0;
+        font-weight: var(--font-bold);
+        letter-spacing: -0.02em;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+        @media (max-width: 768px) {
+            font-size: var(--text-xl);
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            font-size: var(--text-2xl);
+        }
+    }
+
+    @media (max-width: 480px) {
+        gap: var(--space-2);
+    }
+}
+
+/* Actions Section */
+.actionsSection {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-shrink: 0;
+
+    @media (max-width: 768px) {
+        gap: var(--space-3);
+    }
+}
+
+/* Calculator Wrapper in Header */
+.calculatorWrapper {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--secondary-600);
+    border-radius: var(--radius-xl);
+    border: 2px solid var(--secondary-700);
+    box-shadow: var(--shadow-md);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    flex-shrink: 0;
+
+    &:hover {
+        transform: scale(1.1);
+        background: var(--secondary-700);
+        border-color: var(--secondary-800);
+        box-shadow: var(--shadow-lg);
+    }
+
+    &:active {
+        transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* Auth Buttons */
+.authButton {
+    padding: var(--space-3) var(--space-6);
+    background: linear-gradient(135deg, var(--secondary-600) 0%, var(--secondary-700) 100%);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: var(--radius-full);
+    font-size: var(--text-base);
+    font-weight: var(--font-semibold);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md);
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+    flex-shrink: 0;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        background: linear-gradient(135deg, var(--secondary-500) 0%, var(--secondary-700) 100%);
+    }
+
+    &:active {
+        transform: translateY(0);
+        box-shadow: var(--shadow-sm);
+    }
+
+    @media (max-width: 768px) {
+        padding: var(--space-2) var(--space-4);
+        font-size: var(--text-sm);
+    }
+}
+
+.logoutButton {
+    background: linear-gradient(135deg, var(--error) 0%, var(--error-dark) 100%);
+
+    &:hover {
+        background: linear-gradient(135deg, #ef5350 0%, #c62828 100%);
+    }
+}
+
+/* Main Content Area */
+.mainContent {
+    padding: var(--space-8) 0;
+
+    @media (max-width: 768px) {
+        padding: var(--space-6) 0;
+    }
 }

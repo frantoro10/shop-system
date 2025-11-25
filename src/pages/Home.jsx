@@ -1,19 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useContext } from 'react'
 import styles from "./Home.module.scss"
 import { ProductsContext } from "../contexts/ProductsContext"
 import { AuthContext } from "../contexts/AuthContext"
 import ItemListContainer from "../components/ItemListContainer/ItemListContainer"
 import FiltersMenu from "../components/Filters/FiltersMenu"
 import SearchBar from "../components/Filters/SearchBar";
-import Calculator from '../components/Calculator/Calculator';
 import ProductForm from '../components/ProductForm/ProductForm';
 
 const Home = () => {
-
-  const navigate = useNavigate();
   const { products, filterProducts, refreshProducts } = useContext(ProductsContext);
-  const { isAuthenticated, logout } = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
   const [showProductForm, setShowProductForm] = useState(false);
 
   // Refresh products list after creating or deleting
@@ -21,45 +17,11 @@ const Home = () => {
     refreshProducts();
   };
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      navigate('/');
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-    }
-  };
-
   return (
     <div className={styles["page-container"]}>
-      <div className={`${styles["brand-container"]} d-flex flex-row align-items-center justify-content-center`}>
-        <img src="/images/brand/big-bull.webp" alt="" />
-        <h1 className='mb-2 ms-2 ' style={{ fontSize: "2em" }}>Big Bull</h1>
-        
-        {/* Login/Logout Button */}
-        <div className={styles['auth-button-container']}>
-          {isAuthenticated ? (
-            <button 
-              onClick={handleLogout}
-              className={styles['auth-button']}
-              data-action="logout"
-            >
-              Cerrar Sesión
-            </button>
-          ) : (
-            <button 
-              onClick={() => navigate('/login')}
-              className={styles['auth-button']}
-            >
-              Iniciar Sesión
-            </button>
-          )}
-        </div>
-      </div>
-      
       {/* Only show create product button if authenticated */}
       {isAuthenticated && (
-        <div className='text-center my-3'>
+        <div className='text-center my-4'>
           <button 
             onClick={() => setShowProductForm(!showProductForm)}
             className={styles['toggle-form-button']}
@@ -72,12 +34,9 @@ const Home = () => {
       {/* Product Creation Form - only if authenticated */}
       {isAuthenticated && showProductForm && <ProductForm onProductCreated={handleProductChange} />}
 
-      <div className='my-3 position-relative'>
+      {/* Search Bar */}
+      <div className='my-4'>
         <SearchBar />
-        {/* Calculator - Always visible, positioned next to search bar */}
-        <div className={`${styles["calculator-container"]}`}>
-          <Calculator/>
-        </div>
       </div>
 
       <div className='container-fluid'>

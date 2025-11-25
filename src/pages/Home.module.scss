@@ -1,111 +1,36 @@
-.brand-container {
-    background: linear-gradient(135deg, var(--primary-800) 0%, var(--primary-900) 100%);
-    color: var(--text-inverse);
-    padding: var(--space-6) var(--space-4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-4);
-    box-shadow: var(--shadow-lg);
-    position: relative;
-    border-bottom: 3px solid var(--primary-500);
-    overflow: hidden;
-
-    /* Animated background effect */
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-        animation: shimmer 3s infinite;
-    }
-
-    @keyframes shimmer {
-        0% {
-            left: -100%;
-        }
-        100% {
-            left: 100%;
-        }
-    }
-    
-    h1 {
-        font-size: var(--text-4xl);
-        margin: 0;
-        font-weight: var(--font-bold);
-        letter-spacing: -0.02em;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        position: relative;
-        z-index: 1;
-    }
-
-    img {
-        width: 90px;
-        height: auto;
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-        transition: transform var(--transition-base);
-        position: relative;
-        z-index: 1;
-
-        &:hover {
-            transform: scale(1.08) rotate(5deg);
-        }
-    }
+/* Page Container */
+.page-container {
+    max-width: var(--container-2xl);
+    margin: 0 auto;
+    padding: 0 var(--space-4);
+    animation: fadeIn var(--transition-slow);
 
     @media (max-width: 768px) {
-        padding: var(--space-4) var(--space-2);
-        gap: var(--space-2);
-        
-        h1 {
-            font-size: var(--text-xl);
-        }
-
-        img {
-            width: 65px;
-        }
-    }
-
-    @media (min-width: 769px) and (max-width: 1024px) {
-        padding: var(--space-5) var(--space-3);
-        
-        h1 {
-            font-size: var(--text-3xl);
-        }
-
-        img {
-            width: 75px;
-        }
+        padding: 0 var(--space-3);
     }
 }
 
-.auth-button-container {
-    position: absolute;
-    right: var(--space-6);
-    top: 50%;
-    transform: translateY(-50%);
-
-    @media (max-width: 768px) {
-        position: static;
-        transform: none;
-        margin-left: auto;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
 
-.auth-button {
-    padding: var(--space-3) var(--space-6);
-    background: linear-gradient(135deg, var(--secondary-400) 0%, var(--secondary-600) 100%);
+/* Toggle Form Button */
+.toggle-form-button {
+    padding: var(--space-4) var(--space-8);
+    background: linear-gradient(135deg, var(--secondary-600) 0%, var(--secondary-700) 100%);
     color: var(--text-inverse);
     border: none;
-    border-radius: var(--radius-full);
-    font-size: var(--text-base);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-lg);
     font-weight: var(--font-semibold);
     cursor: pointer;
     transition: all var(--transition-base);
     box-shadow: var(--shadow-md);
-    white-space: nowrap;
     letter-spacing: -0.01em;
 
     &:hover {
@@ -119,122 +44,18 @@
         box-shadow: var(--shadow-sm);
     }
 
-    /* Special styling when it's logout button */
-    &[data-action="logout"] {
-        background: linear-gradient(135deg, var(--error) 0%, var(--error-dark) 100%);
-
-        &:hover {
-            background: linear-gradient(135deg, #ef5350 0%, #c62828 100%);
-        }
-    }
-
     @media (max-width: 768px) {
-        padding: var(--space-2) var(--space-4);
-        font-size: var(--text-sm);
-    }
-}
-
-// Calculator button styling and positioning - professional theme
-.calculator-container {
-    cursor: pointer;
-    width: 56px;
-    position: absolute;
-    right: var(--space-4);
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: var(--z-dropdown);
-    transition: all var(--transition-base);
-    padding: var(--space-3);
-    background: var(--secondary-600);
-    border-radius: var(--radius-xl);
-    border: 2px solid var(--secondary-700);
-    box-shadow: var(--shadow-md);
-
-    &:hover {
-        transform: translateY(-50%) scale(1.12);
-        background: var(--secondary-700);
-        border-color: var(--secondary-800);
-        box-shadow: var(--shadow-lg);
-    }
-
-    &:active {
-        transform: translateY(-50%) scale(1.05);
-    }
-
-    // On mobile, position calculator button below search bar
-    @media (max-width: 768px) {
-        width: 48px;
-        position: fixed;
-        right: var(--space-4);
-        top: auto;
-        bottom: var(--space-6);
-        transform: none;
-        padding: var(--space-3);
-        
-        &:hover {
-            transform: scale(1.12);
-        }
-
-        &:active {
-            transform: scale(1.05);
-        }
-    }
-
-    @media (min-width: 769px) and (max-width: 1024px) {
-        width: 52px;
-        right: var(--space-3);
-    }
-}
-
-// Toggle form button - consistent styling
-.toggle-form-button {
-    padding: var(--space-4) var(--space-8);
-    background: linear-gradient(135deg, var(--secondary-600) 0%, var(--secondary-700) 100%);
-    color: var(--text-inverse);
-    border: none;
-    border-radius: var(--radius-lg);
-    font-size: var(--text-lg);
-    font-weight: var(--font-semibold);
-    cursor: pointer;
-    transition: all var(--transition-base);
-    box-shadow: var(--shadow-sm);
-    letter-spacing: -0.01em;
-
-    &:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--shadow-md);
-        background: linear-gradient(135deg, var(--secondary-700) 0%, var(--secondary-800) 100%);
-    }
-
-    &:active {
-        transform: translateY(0);
-        box-shadow: var(--shadow-xs);
-    }
-
-    @media (max-width: 768px) {
-        padding: var(--space-3) var(--space-5);
+        padding: var(--space-3) var(--space-6);
         font-size: var(--text-base);
     }
 }
 
-// Additional container improvements
-.page-container {
-    animation: fadeIn var(--transition-slow);
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
+/* Filter Container */
 .filter-container {
     padding: var(--space-4) var(--space-2);
     
     @media (max-width: 768px) {
         padding: var(--space-3) 0;
+        margin-bottom: var(--space-4);
     }
 }

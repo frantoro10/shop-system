@@ -1,8 +1,14 @@
 .search-container {
-    width: 100%;
-    max-width: 800px;
+    width: 50% !important;
     margin: 0 auto;
     padding: var(--space-4) var(--space-3);
+    
+    @media (max-width: 768px) {
+        width: 100% !important;
+    }
+    @media (max-width: 1400px) {
+        width: 60% !important
+    }
 }
 
 .search-wrapper {
