@@ -1,91 +1,116 @@
 import Modal from 'react-modal';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { ProductsContext } from '../../contexts/ProductsContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalculator, faX } from '@fortawesome/free-solid-svg-icons'
+import { faCalculator, faX, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import styles from './Calculator.module.scss'
 
 const Calculator = () => {
-  const [openModal, setOpenModal] = useState(false); // Estado para controlar la visibilidad del modal. Se pasa como atributo al componente <Modal isOpen={openModal}> 
-  const { cartProducts, removeProductCart } = useContext(ProductsContext); // Accedemos al array del carrito de productos
+  const [openModal, setOpenModal] = useState(false);
+  const { cartProducts, removeProductCart } = useContext(ProductsContext);
 
-
-  const handleShow = () => {
-    setOpenModal(true);
-  } // Boton para mostrar modal (true)
-
-  const handleClose = () => {
-    setOpenModal(false);
-  } // Boton para ocultar modal (false)
+  const handleShow = () => setOpenModal(true);
+  const handleClose = () => setOpenModal(false);
 
   const totalPrice = () => {
-    let allPrices = 0;
-    cartProducts.forEach((product) => {
-      allPrices += product.price;
-    })
-    return (allPrices)
+    return cartProducts.reduce((acc, product) => acc + product.price, 0);
   }
 
-
   return (
-    <div>
-      {/* Only show calculator icon when modal is closed */}
+    <>
+      {/* Trigger Button - Preserved as requested */}
       {!openModal && (
         <div className={styles["calculator-icon-wrapper"]}>
-          <FontAwesomeIcon icon={faCalculator} size="xl" className={` ${styles["calculator-icon"]}`} onClick={handleShow} />
-          {cartProducts.length > 0 && (
-            <span className={styles["cart-badge"]}>{cartProducts.length}</span>
-          )}
+          <button 
+            className={styles["calculator-trigger"]} 
+            onClick={handleShow}
+            aria-label="Abrir carrito"
+          >
+            <FontAwesomeIcon icon={faCalculator} />
+            {cartProducts.length > 0 && (
+              <span className={styles["cart-badge"]}>{cartProducts.length}</span>
+            )}
+          </button>
         </div>
       )}
 
-      {/* Modal with proper overlay styling */}
       <Modal 
         isOpen={openModal} 
-        className={`${styles["modal"]}`}
+        onRequestClose={handleClose}
+        className={styles["modal-content"]}
         overlayClassName={styles["modal-overlay"]}
+        style={{
+          overlay: {},
+          content: {}
+        }}
+        ariaHideApp={false}
       >
-        <button 
-          onClick={handleClose}
-          className={styles["close-button"]}
-          aria-label="Cerrar carrito"
-        >
-          <FontAwesomeIcon icon={faX} />
-        </button>
-
-        <div className={`${styles["total-price"]}`}>
-          <p>Total: <span>${totalPrice()}</span> </p>
+        {/* Header */}
+        <div className={styles["modal-header"]}>
+          <h2>Mi Carrito</h2>
+          <button 
+            onClick={handleClose}
+            className={styles["close-button"]}
+            aria-label="Cerrar carrito"
+          >
+            <FontAwesomeIcon icon={faX} />
+          </button>
         </div>
-        
-        {cartProducts.length === 0 ? (
-          <div className={styles["empty-cart"]}>
-            <p>🛒</p>
-            <h3>Tu carrito está vacío</h3>
-            <p>Agrega productos para comenzar tu compra</p>
-          </div>
-        ) : (
-          cartProducts.map((product) => {
-            return (
-                     
-                <div key={product.id} className={`${styles["calculator-product"]} d-flex flex-column`}>
-                <div className={`${styles["product-xIcon"]}`}>
-                  <FontAwesomeIcon icon={faX} onClick={() => removeProductCart(product.id)} size="xl" />
-                </div>
-                  <img src={product.img} alt="Producto del Kiosco" />
-                  <div className="d-flex flex-column">
-                    <span>{product.name}</span>
-                    <span>Precio unidad: <span>${product.unitPrice}</span></span> {/* unitPrice es agregado en ItemListContainer no en Firebase */}
-                    <span>Precio cantidad: <span className={`${styles["quantity-price"]}`}>${product.price}</span></span>
-                    <span>Cantidad: <span className={`${styles["quantity-price"]}`} >{product.quantity}</span></span>
+
+        {/* Body */}
+        <div className={styles["modal-body"]}>
+          {cartProducts.length === 0 ? (
+            <div className={styles["empty-state"]}>
+              <div className={styles["empty-icon"]}>🛒</div>
+              <h3>Tu carrito está vacío</h3>
+              <p>¡Agrega productos deliciosos para comenzar!</p>
+            </div>
+          ) : (
+            <div className={styles["cart-list"]}>
+              {cartProducts.map((product) => (
+                <div key={product.id} className={styles["cart-item"]}>
+                  <div className={styles["item-image"]}>
+                    <img src={product.img} alt={product.name} />
                   </div>
+                  
+                  <div className={styles["item-details"]}>
+                    <h4 className={styles["item-name"]}>{product.name}</h4>
+                    <div className={styles["item-meta"]}>
+                      <span className={styles["item-quantity"]}>Cant: {product.quantity}</span>
+                      <span className={styles["item-unit-price"]}>x ${product.unitPrice}</span>
+                    </div>
+                    <div className={styles["item-total"]}>
+                      ${product.price}
+                    </div>
+                  </div>
+
+                  <button 
+                    className={styles["remove-button"]}
+                    onClick={() => removeProductCart(product.id)}
+                    aria-label="Eliminar producto"
+                  >
+                    <FontAwesomeIcon icon={faTrashCan} />
+                  </button>
                 </div>
-              
-            )
-          })
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        {cartProducts.length > 0 && (
+          <div className={styles["modal-footer"]}>
+            <div className={styles["total-row"]}>
+              <span>Total a Pagar</span>
+              <span className={styles["total-amount"]}>${totalPrice()}</span>
+            </div>
+            <button className={styles["checkout-button"]}>
+              Finalizar Compra
+            </button>
+          </div>
         )}
       </Modal>
-
-    </div>
+    </>
   )
 }
 
