@@ -30,8 +30,8 @@ const ProductForm = ({ onProductCreated }) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (!['image/jepg', 'image/png', 'image/webp'].includes(file.type)) {
-      setError("Only JPGG, PNG o Webp.");
+    if (!['image/jpeg', 'image/png', 'image/webp', 'image/jpg'].includes(file.type)) {
+      setError("Only JPG, PNG o Webp.");
       setImageFile(null);
       setImagePreview('');
       return;
@@ -147,7 +147,7 @@ const ProductForm = ({ onProductCreated }) => {
           <label>Imagen</label>
           <input
             type="file"
-            accept="image/jpeg,image/png,image/webp"
+            accept="image/jpeg,image/png,image/webp,image/jpg"
             onChange={handleImageChange}
             required={true}
             disabled={loading}
