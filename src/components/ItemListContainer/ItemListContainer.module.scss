@@ -18,13 +18,27 @@
    ============================================ */
 .product-container {
     display: grid;
-    /* Smart Grid: Adapts automatically but prevents cards from getting too small */
-    grid-template-columns: repeat(auto-fill, minmax(16.5rem, 1fr));
-    gap: 1.5rem;
-    padding: 1.5rem;
+
+    /* Prevent any track from exceeding viewport width */
+    grid-template-columns: repeat(auto-fit, minmax(min(16.5rem, 100%), 1fr));
+
+    gap: var(--space-6);
+    padding: var(--space-6);
+
     width: 100%;
-    max-width: 120rem;
+    max-width: 100%;
     margin: 0 auto;
+
+    /* Kill horizontal overflow at the source */
+    overflow-x: clip;
+}
+
+/* Ensure children can shrink inside grid/flex without pushing layout */
+.card,
+.card-content,
+.price-cost-container,
+.controls-container {
+    min-width: 0;
 }
 
 /* ============================================
@@ -346,8 +360,8 @@
 @media (max-width: 30rem) {
     .product-container {
         grid-template-columns: 1fr;
-        padding: 1rem;
-        gap: 1rem;
+        padding: var(--space-4);
+        gap: var(--space-4);
     }
     
     /* Force stack on very small screens */
@@ -364,10 +378,9 @@
 /* Tablet Range (480px - 1024px) */
 @media (min-width: 30rem) and (max-width: 64rem) {
     .product-container {
-        /* Ensure 2 columns fit comfortably, 3 if space allows */
-        grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-        gap: 1rem;
-        padding: 1.25rem;
+        grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+        gap: var(--space-4);
+        padding: var(--space-5);
     }
 
     .card-content {
