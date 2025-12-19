@@ -1,125 +1,71 @@
-import React from 'react'
-import styles from './FiltersMenu.module.scss'
-import { ProductsContext } from '../../contexts/ProductsContext'
-import { useState, useContext, useEffect } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// Category icons for filter menu
-import { faCandyCane, faShoppingBasket, faBottleWater, faCheese, faPrescriptionBottle } from '@fortawesome/free-solid-svg-icons'
-
+import React, { useContext } from 'react';
+import styles from './FiltersMenu.module.scss';
+import { ProductsContext } from '../../contexts/ProductsContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCandyCane, faShoppingBasket, faBottleWater, faCheese, faPrescriptionBottle } from '@fortawesome/free-solid-svg-icons';
 
 const FiltersMenu = () => {
+  const { filters, setFilters } = useContext(ProductsContext);
+  const selected = filters.selectedCheckboxes || {};
 
-    const { products, setProducts } = useContext(ProductsContext)
-    const { filterProducts, setFilterProducts } = useContext(ProductsContext)
+  const toggle = (e) => {
+    const key = e.target.value.toLowerCase();
+    const isChecked = e.target.checked;
 
-    const [selectedCheckboxes, setSelectedCheckboxes] = useState({});
+    setFilters((prev) => ({
+      ...prev,
+      selectedCheckboxes: { ...(prev.selectedCheckboxes || {}), [key]: isChecked },
+    }));
+  };
 
+  return (
+    <div className={styles['filter-wrapper']}>
+      <div className={styles['filter-menu']}>
+        <label className={styles['checkbox-label']}>
+          <input className={styles['checkbox-input']} type="checkbox" value="kiosco" onChange={toggle} checked={!!selected['kiosco']} />
+          <span className={styles['checkbox-text']}>
+            <FontAwesomeIcon icon={faCandyCane} className={styles['category-icon']} />
+            Kiosco
+          </span>
+        </label>
 
-    const filterCategory = (e) => {
-        const category = e.target.value.toLowerCase();
-        const isChecked = e.target.checked;
+        <label className={styles['checkbox-label']}>
+          <input className={styles['checkbox-input']} type="checkbox" value="almacen" onChange={toggle} checked={!!selected['almacen']} />
+          <span className={styles['checkbox-text']}>
+            <FontAwesomeIcon icon={faShoppingBasket} className={styles['category-icon']} />
+            Almacen
+          </span>
+        </label>
 
-        // Actualiza el estado de los checkbox seleccionados
-        setSelectedCheckboxes((prevState) => ({
-            ...prevState,
-            [category]: isChecked,
-        }));
-    };
+        <label className={styles['checkbox-label']}>
+          <input className={styles['checkbox-input']} type="checkbox" value="bebidas" onChange={toggle} checked={!!selected['bebidas']} />
+          <span className={styles['checkbox-text']}>
+            <FontAwesomeIcon icon={faBottleWater} className={styles['category-icon']} />
+            Bebidas
+          </span>
+        </label>
 
-    useEffect(() => {
-        // Filtra los productos según los checkbox seleccionados
-        const filteredProducts = products.filter((item) => {
-            if (Object.keys(selectedCheckboxes).length === 0) {
-                // Si no hay ningún checkbox seleccionado, muestra todos los productos
-                return true;
-            }
-            return selectedCheckboxes[item.category.toLowerCase()]
-        });
+        <label className={styles['checkbox-label']}>
+          <input className={styles['checkbox-input']} type="checkbox" value="lacteos" onChange={toggle} checked={!!selected['lacteos']} />
+          <span className={styles['checkbox-text']}>
+            <FontAwesomeIcon icon={faCheese} className={styles['category-icon']} />
+            Lacteos
+          </span>
+        </label>
 
-        setFilterProducts(filteredProducts);
-        
-    }, [selectedCheckboxes, setFilterProducts, products]);
+        <label className={styles['checkbox-label']}>
+          <input className={styles['checkbox-input']} type="checkbox" value="farmacia" onChange={toggle} checked={!!selected['farmacia']} />
+          <span className={styles['checkbox-text']}>
+            <FontAwesomeIcon icon={faPrescriptionBottle} className={styles['category-icon']} />
+            Farmacia
+          </span>
+        </label>
+      </div>
+    </div>
+  );
+};
 
-
-    return (
-        <div className={styles['filter-wrapper']}>
-            <div className={styles['filter-menu']}>
-                <label className={styles['checkbox-label']}>
-                    <input 
-                        className={styles['checkbox-input']} 
-                        type="checkbox" 
-                        name="category" 
-                        value="kiosco" 
-                        onChange={filterCategory} 
-                        checked={selectedCheckboxes['kiosco'] || false} 
-                    />
-                    <span className={styles['checkbox-text']}>
-                        <FontAwesomeIcon icon={faCandyCane} className={styles['category-icon']} />
-                        Kiosco
-                    </span>
-                </label>
-                <label className={styles['checkbox-label']}>
-                    <input 
-                        className={styles['checkbox-input']} 
-                        type="checkbox" 
-                        name="category" 
-                        value="almacen" 
-                        onChange={filterCategory} 
-                        checked={selectedCheckboxes['almacen'] || false} 
-                    />
-                    <span className={styles['checkbox-text']}>
-                        <FontAwesomeIcon icon={faShoppingBasket} className={styles['category-icon']} />
-                        Almacen
-                    </span>
-                </label>
-                <label className={styles['checkbox-label']}>
-                    <input 
-                        className={styles['checkbox-input']} 
-                        type="checkbox" 
-                        name="category" 
-                        value="bebidas" 
-                        onChange={filterCategory} 
-                        checked={selectedCheckboxes['bebidas'] || false} 
-                    />
-                    <span className={styles['checkbox-text']}>
-                        <FontAwesomeIcon icon={faBottleWater} className={styles['category-icon']} />
-                        Bebidas
-                    </span>
-                </label>
-                <label className={styles['checkbox-label']}>
-                    <input 
-                        className={styles['checkbox-input']} 
-                        type="checkbox" 
-                        name="category" 
-                        value="lacteos" 
-                        onChange={filterCategory} 
-                        checked={selectedCheckboxes['lacteos'] || false} 
-                    />
-                    <span className={styles['checkbox-text']}>
-                        <FontAwesomeIcon icon={faCheese} className={styles['category-icon']} />
-                        Lacteos
-                    </span>
-                </label>
-                <label className={styles['checkbox-label']}>
-                    <input 
-                        className={styles['checkbox-input']} 
-                        type="checkbox" 
-                        name="category" 
-                        value="farmacia" 
-                        onChange={filterCategory} 
-                        checked={selectedCheckboxes['farmacia'] || false} 
-                    />
-                    <span className={styles['checkbox-text']}>
-                        <FontAwesomeIcon icon={faPrescriptionBottle} className={styles['category-icon']} />
-                        Farmacia
-                    </span>
-                </label>
-            </div>
-        </div>
-    )
-}
-
-export default FiltersMenu
+export default FiltersMenu;
 
 
 {/* <ul>

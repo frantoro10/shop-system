@@ -1,28 +1,32 @@
-import React, { useState, useContext } from 'react'
-import styles from "./Home.module.scss"
-import { ProductsContext } from "../contexts/ProductsContext"
-import { AuthContext } from "../contexts/AuthContext"
-import ItemListContainer from "../components/ItemListContainer/ItemListContainer"
-import FiltersMenu from "../components/Filters/FiltersMenu"
-import SearchBar from "../components/Filters/SearchBar";
+import { useState, useContext } from 'react';
+import styles from './Home.module.scss';
+import { ProductsContext } from '../contexts/ProductsContext';
+import { AuthContext } from '../contexts/AuthContext';
+import ItemListContainer from '../components/ItemListContainer/ItemListContainer';
+import FiltersMenu from '../components/Filters/FiltersMenu';
+import SearchBar from '../components/Filters/SearchBar';
 import ProductForm from '../components/ProductForm/ProductForm';
+import MobileFiltersSheet from '../components/Filters/MobileFiltersSheet';
 
 const Home = () => {
-  const { products, filterProducts, refreshProducts } = useContext(ProductsContext);
+  const { filterProducts, refreshProducts, filters } = useContext(ProductsContext);
   const { isAuthenticated } = useContext(AuthContext);
   const [showProductForm, setShowProductForm] = useState(false);
+  const [openFilters, setOpenFilters] = useState(false);
 
   // Refresh products list after creating or deleting
   const handleProductChange = () => {
     refreshProducts();
   };
 
+  const activeCount = Object.values(filters.selectedCheckboxes || {}).filter(Boolean).length;
+
   return (
-    <div className={styles["page-container"]}>
+    <div className={styles['page-container']}>
       {/* Only show create product button if authenticated */}
       {isAuthenticated && (
-        <div className='text-center my-4'>
-          <button 
+        <div className={styles['adminActions']}>
+          <button
             onClick={() => setShowProductForm(!showProductForm)}
             className={styles['toggle-form-button']}
           >
@@ -32,37 +36,42 @@ const Home = () => {
       )}
 
       {/* Product Creation Form - only if authenticated */}
-      {isAuthenticated && showProductForm && <ProductForm onProductCreated={handleProductChange} />}
+      {isAuthenticated && showProductForm && (
+        <ProductForm onProductCreated={handleProductChange} />
+      )}
 
-      {/* Search Bar */}
-      <div className='my-4'>
+      {/* Top Bar with Search and Filter Button */}
+      <div className={styles['topBar']}>
         <SearchBar />
-      </div>
 
-      <div className='container-fluid'>
-        <div className='row flex-row'>
-          <div className={` ${styles["filter-container"]} col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3 col-xxl-2 d-flex justify-content-center `}>
-            <FiltersMenu />
-          </div>
-          <div className='col-12 col-sm-8 col-md-8 col-lg-9 col-xl-9 col-xxl-10'>
-            {filterProducts.length > 0 ? (
-              <ItemListContainer 
-                productsData={filterProducts} 
-                onProductDeleted={handleProductChange}
-                isAuthenticated={isAuthenticated}
-              />
-            ) : (
-              <ItemListContainer 
-                productsData={products} 
-                onProductDeleted={handleProductChange}
-                isAuthenticated={isAuthenticated}
-              />
-            )}
-          </div>
+        <div className={styles['mobileToolbar']}>
+          <button className={styles['filtersButton']} onClick={() => setOpenFilters(true)}>
+            Filtros
+            {activeCount > 0 && <span className={styles['filtersBadge']}>{activeCount}</span>}
+          </button>
         </div>
       </div>
-    </div>
-  )
-}
 
-export default Home
+      {/* Mobile Filters Sheet */}
+      <MobileFiltersSheet isOpen={openFilters} onClose={() => setOpenFilters(false)} />
+
+      <div className={styles['content']}>
+        {/* Desktop Filters Menu */}
+        <aside className={styles['desktopFilters']}>
+          <FiltersMenu />
+        </aside>
+
+        {/* Products Results Section */}
+        <section className={styles['results']}>
+          <ItemListContainer
+            productsData={filterProducts}
+            onProductDeleted={handleProductChange}
+            isAuthenticated={isAuthenticated}
+          />
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default Home;

@@ -13,7 +13,7 @@ export const ProductsProvider = ({ children }) => {
   // filtrado estado para sort y checkboxes
   const [filters,setFilters] = useState({
     selectedCheckboxes: {},
-    // selectedSortOption: ''  (En caso de que haga componente para ordenar mayor a menor viceversa.)
+    searchQuery: '',
   })
 
   const removeProductCart = (productId) => {
@@ -35,47 +35,35 @@ export const ProductsProvider = ({ children }) => {
   // Filtros
   useEffect (() => {
     const applyFilters = () => {
-
-      // array de filtrado utilizando al array original "products" con un (spread ...)
       let filtered = [...products];
 
-      // Filtrar por categorías seleccionadas
-      
-      // selectedCategories tiene un valor de array con todas las keys del objeto que se encuentra dentro del objeto padre filters "filters.selectedCheckboxes". Creamos el array en base a las propiedades de ese objeto con el metodo Object.keys, luego a este array lo concatenamos "." con un metodo de array "filter" para filtrar todas las propiedades y luego avanzar con las condicionales de filtro.
-
-      // Recordar que el valor de estas propiedades se sacan del componente "FiltersMenu" en el cual esta hecha la logica para obtener estas propiedades de objeto "KEYS", consumiendo el objeto "filters" proporcionado en este contexto.
-
-      const selectedCategories = Object.keys(filters.selectedCheckboxes).filter(
-          key => filters.selectedCheckboxes[key]
+      const selectedCategories = Object.keys(filters.selectedCheckboxes || {}).filter(
+        (key) => filters.selectedCheckboxes[key]
       );
-
-      // Aqui se genera la condicional en base al array de keys. Si es mayor a 0 (Si existen valores), filtramos al array filtered (que tiene los valores de los productos {objetos}). Que se filtra?, se filtra en base al array selectedCategories usando el metodo .includes para filtrar los valores que coincidan con los valores de la propiedad .title || (o) .brand
 
       if (selectedCategories.length > 0) {
-        filtered = filtered.filter(product =>
-          selectedCategories.includes(product.category.toLowerCase()) ||
-          selectedCategories.includes(product.subCategory.toLowerCase())
-      );
+        filtered = filtered.filter((product) => {
+          const category = (product?.category ?? '').toLowerCase();
+          const subCategory = (product?.subCategory ?? '').toLowerCase();
+          return selectedCategories.includes(category) || selectedCategories.includes(subCategory);
+        });
       }
 
-      // Iniciamos la siguiente logica de filtrado en base al componente "SortSelector"
+      const q = (filters.searchQuery || '').trim().toLowerCase();
+      if (q) {
+        filtered = filtered.filter((product) =>
+          (product?.name || '').toLowerCase().includes(q) ||
+          (product?.category || '').toLowerCase().includes(q)
+        );
+      }
 
-      // Aplicar ordenamiento si hay una opción seleccionada.   
-      // if (filters.selectedSortOption === 'menorPrecio') {
-      //     filtered.sort((a, b) => a.price - b.price);
-      // } else if (filters.selectedSortOption === 'mayorPrecio') {
-      //     filtered.sort((a, b) => b.price - a.price);
-      // }
-
-      // Actualizar el estado de los productos filtrados
       setFilterProducts(filtered);
-  };
+    };
 
-  applyFilters();
-}, [products, filters]);
+    applyFilters();
+  }, [products, filters]);
 
   return (
-    
     <ProductsContext.Provider value={{ 
       products, 
       setProducts, 
